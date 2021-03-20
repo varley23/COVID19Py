@@ -156,3 +156,28 @@ class COVID19(object):
         """
         data = self._request("/v2/locations/" + str(country_id))
         return data["location"]
+    
+ class Location(object):
+    country = ""
+
+    def __init__(self, country=None):
+        if country is not None:
+            self.country = country
+
+    def getLocation(self, country, timelines=False) -> List[Dict]:
+        data = None
+        if len(country) > 2:
+            if timelines:
+                data = self._request(
+                    "/v2/locations", {"country": country, "timelines": str(timelines).lower()})
+            else:
+                data = self._request("/v2/locations", {"country": country})
+            return data["locations"]
+        else:
+            if timelines:
+                data = self._request(
+                    "/v2/locations", {"country_code": country, "timelines": str(timelines).lower()})
+            else:
+                data = self._request(
+                    "/v2/locations", {"country_code": country})
+            return data["locations"]
